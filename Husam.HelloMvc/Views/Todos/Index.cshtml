@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Husam.HelloMvc.Models.Todo>
+
+@{
+    ViewData["Title"] = "To-Do List";
+}
+
+<h1>To-Do List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Task</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+            <th>Status</th>   <!-- ✅ clearer label -->
+            <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.DueDate?.ToString("dd MMM yyyy")</td>
+
+                <!-- ✅ Status badge -->
+                <td>
+                    @Html.Raw(item.IsDone
+                             ? "<span class='badge bg-success'>Done</span>"
+                             : "<span class='badge bg-secondary'>Pending</span>")
+                </td>
+
+                <td>@item.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, HH:mm")</td>
+
+                <td>
+                    <!-- ✅ Toggle button -->
+                    <form asp-action="ToggleDone" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm @(item.IsDone ? "btn-warning" : "btn-success")">
+                            @(item.IsDone ? "Mark Pending" : "Mark Done")
+                        </button>
+                    </form>
+
+                    <!-- Existing scaffolded links -->
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
