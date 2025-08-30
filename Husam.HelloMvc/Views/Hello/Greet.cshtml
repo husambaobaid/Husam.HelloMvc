@@ -1,0 +1,28 @@
+﻿@model Husam.HelloMvc.Models.GreetViewModel
+@{
+    ViewData["Title"] = "Greet";
+}
+
+<h1>Greet</h1>
+
+<form asp-action="Greet" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Say hello</button>
+</form>
+
+@if (Model?.Message != null)
+{
+    <div class="alert alert-success mt-3">
+        @Model.Message
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
